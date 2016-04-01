@@ -1,27 +1,3 @@
-test <- "POST /auth/github HTTP/1.1
-User-Agent: MyClient/1.0.0
-Accept: application/vnd.travis-ci.2+json
-Host: api.travis-ci.org
-Content-Type: application/json
-Content-Length: 37
-
-{\"github_token\":\"YOUR GITHUB TOKEN\"}"
-
-test2 <- "GET /users HTTP/1.1
-User-Agent: MyClient/1.0.0
-Accept: application/vnd.travis-ci.2+json
-Host: api.travis-ci.org
-Authorization: token \"YOUR TRAVIS ACCESS TOKEN\""
-
-test3 <- "GET / HTTP/1.1
-User-Agent: MyClient/1.0.0
-Accept: application/vnd.travis-ci.2+json
-Host: api.travis-ci.org"
-
-test4 <- "GET /?acl=something HTTP/1.1
-Host: BucketName.s3.amazonaws.com
-Date: date"
-
 parse_block <- function(x, ..., scheme = "http") {
   lines <- strsplit(x, "\n")[[1]]
   first_blank <- which(lines == "")
@@ -94,32 +70,4 @@ parse_headers <- function(x) {
   values <- res[seq(length(res) / 2 + 1, length(res))]
   names(values) <- res[seq(1, length(res) / 2)]
   as.list(values)
-}
-
-
-# do.call(VERB, list(url = do.call(modify_url, c(url = "", t3$parts)), verb = t3$verb, add_headers(unlist(t3$headers))))
-
-make_function <- function(x) {
-  subs <- attr(x, "substitutions")
-  args <- alist(Today="test")#as.pairlist(rep(alist(a=), length(subs)))
-  #names(args) <- subs
-  f <- eval(
-      unquote("function(...) {
-        headers <- .(headers)
-}", list(headers = x$headers)))
-        #str(headers)
-        #query <- lapply(.(query), eval)
-        #str(query)
-        #parts <- .(parts)
-        #url <- do.call(modify_url, c(url = "", parts))
-        #str(url)
-        #.(verb)(url = url, query = query, add_headers(.headers = headers))
-      #},
-        #list(
-          #verb = as.name(x$verb),
-          #parts = x$parts,
-          #headers = x$headers,
-          #query = x$query)))
-  formals(f) <- args
-  f
 }
